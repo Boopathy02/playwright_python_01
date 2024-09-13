@@ -1,18 +1,18 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
   # access_key = "<your_access_key>"
   # secret_key = "<your_secret_key>"
 }
 
 resource "aws_instance" "intro" {
-  ami                    = "ami-0e86e20dae9224db8"
-  instance_type          = "t2.small"
-  key_name               = "vickey-prod-key"
-  vpc_security_group_ids = ["sg-096add7865a855a64"]
+  ami                    = "ami-085f9c64a9b75eed5"
+  instance_type          = "t2.micro"
+  key_name               = "nexgen"
+  vpc_security_group_ids = ["sg-0e4fc70f018d6de64"]
 
   # Specify the root volume for the instance
   root_block_device {
-    volume_size = 20    
+    volume_size = 10    
     volume_type = "gp3" 
   }
 
@@ -28,10 +28,14 @@ resource "aws_instance" "intro" {
     # Add Jenkins user to Docker group
     sudo usermod -aG docker jenkins
     sudo chmod 666 /var/run/docker.sock
+
+    # install Jave 
+    apt install openjdk-17-jdk openjdk-17-jre -y
+
   EOF
 
   tags = {
-    Name = "jenkins_and_docker"
+    Name = "jenkins-slave"
   }
 }
 
